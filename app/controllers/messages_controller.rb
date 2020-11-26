@@ -8,8 +8,8 @@ class MessagesController < ApplicationController
     @message = Message.new(messages_params)
     if @message.save
       message = Message.where(room_id: params[:message][:room_id])
-      ActionCable.server.broadcast "messages_channel_#{message[0].room_id}",message.as_json(include: { user: {only: :name}})
-      render json: { status: :created, message: message.as_json(include: { user: {only: :name}}) }
+      ActionCable.server.broadcast "messages_channel_#{message[0].room_id}",message.as_json(include: { user: {only: [:id, :name, :image]}})
+      render json: { status: :created, message: message.as_json(include: { user: {only: [:id, :name, :image]}}) }
     else
       render json: { status: 500 }
     end
